@@ -39,7 +39,7 @@ function paintRating(card, rating) {
 }
 
 function ratingLabel(rating) {
-  return rating === 4 ? '🌟 Мечтаю больше всего' : '♥'.repeat(rating);
+  return rating === 4 ? '🌟 Мечтаю 💫' : '♥'.repeat(rating);
 }
 
 function priceLabel(price) {
@@ -91,7 +91,7 @@ function render(publishedList) {
       const hearts = card.querySelector('[data-hearts]');
       hearts.textContent = ratingLabel(gift.rating);
       card.querySelector('[data-guest-rating]').hidden = !gift.rating;
-      hearts.setAttribute('aria-label', gift.rating === 4 ? 'Мечтаю больше всего' : 'Сердечек: ' + gift.rating);
+      hearts.setAttribute('aria-label', gift.rating === 4 ? 'Мечтаю' : 'Сердечек: ' + gift.rating);
     }
     gifts.append(card);
   }
