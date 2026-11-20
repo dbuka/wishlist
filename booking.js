@@ -3,6 +3,7 @@
 const bookingNotice = document.querySelector('#booking-notice');
 const reservationTokenKey = 'wishlist-reservation-token-v1';
 const reservationStates = new Map();
+const feedbackTimers = new WeakMap();
 let reservationApi;
 let reservationHeaders;
 
@@ -13,6 +14,18 @@ function updateBookingButton(button, state) {
     mine: 'Снять бронь',
     reserved: 'Забронировано',
   }[state];
+}
+
+function showBookingFeedback(feedback, title, detail) {
+  clearTimeout(feedbackTimers.get(feedback));
+  feedback.replaceChildren();
+  if (!title) return;
+
+  const heading = document.createElement('strong');
+  heading.textContent = title;
+  feedback.append(heading);
+  if (detail) feedback.append(detail);
+  feedbackTimers.set(feedback, setTimeout(() => feedback.replaceChildren(), 8000));
 }
 
 async function reservationRequest(operation, body) {
@@ -61,12 +74,13 @@ if (document.body.hasAttribute('data-published')) {
   gifts.addEventListener('click', async event => {
     const button = event.target.closest('[data-reserve]');
     if (!button || button.disabled) return;
+    const feedback = button.parentElement.querySelector('[data-booking-feedback]');
     const id = button.closest('[data-id]').dataset.id;
     const previous = reservationStates.get(id) || 'available';
     const release = previous === 'mine';
     button.disabled = true;
     button.textContent = release ? 'Снимаем бронь…' : 'Бронируем…';
-    message(bookingNotice, '');
+    showBookingFeedback(feedback);
 
     let browserToken;
     try {
@@ -78,7 +92,7 @@ if (document.body.hasAttribute('data-published')) {
       }
     } catch {
       updateBookingButton(button, previous);
-      message(bookingNotice, 'Для управления бронью нужно разрешить сохранение данных сайта в браузере.');
+      showBookingFeedback(feedback, 'Не удалось изменить бронь', 'Разрешите сохранение данных сайта в браузере.');
       return;
     }
 
@@ -86,18 +100,18 @@ if (document.body.hasAttribute('data-published')) {
       const state = await reservationRequest('wishlist_change_reservation', {
         target_gift: id, browser_token: browserToken, release,
       });
-      const feedback = {
-        available: 'Бронь снята.',
-        mine: 'Бронь сохранена.',
-        reserved: 'Этот подарок уже забронирован.',
+      const result = {
+        available: ['Бронь снята', 'Подарок снова можно забронировать.'],
+        mine: ['Подарок забронирован', 'Если передумаете, нажмите ещё раз.'],
+        reserved: ['Этот подарок уже забронирован'],
       }[state];
-      if (!feedback) throw new Error('Неизвестный статус бронирования.');
+      if (!Array.isArray(result)) throw new Error('Неизвестный статус бронирования.');
       reservationStates.set(id, state);
       updateBookingButton(button, state);
-      message(bookingNotice, feedback);
+      showBookingFeedback(feedback, ...result);
     } catch {
       updateBookingButton(button, previous);
-      message(bookingNotice, 'Не удалось обновить бронь. Попробуй ещё раз.');
+      showBookingFeedback(feedback, 'Не удалось обновить бронь', 'Попробуйте ещё раз.');
     }
   });
 

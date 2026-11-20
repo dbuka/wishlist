@@ -154,6 +154,7 @@ body {
 }
 .guest-rating { color: #ffc4e1; letter-spacing: .12em; }
 .gift-actions {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: .375rem;
@@ -167,6 +168,29 @@ body {
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
+.booking-popover {
+  position: absolute;
+  inset: auto 0 calc(100% + .5rem);
+  z-index: 1;
+}
+.booking-popover:not(:empty) {
+  padding: .5rem .75rem;
+  border-radius: .5rem;
+  background: #2e1545;
+  color: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 35%);
+  font-size: .875rem;
+}
+.booking-popover:not(:empty)::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 25%;
+  border: .375rem solid transparent;
+  border-top-color: #2e1545;
+  transform: translateX(-50%);
+}
+.booking-popover strong { display: block; }
 .empty { border: 1px dashed var(--line); padding: 2.5rem 1rem; text-align: center; border-radius: 1rem; }
 dialog {
   width: min(96%, 540px);
