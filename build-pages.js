@@ -1,6 +1,6 @@
 'use strict';
 
-const { copyFile, writeFile, readFile } = require('node:fs/promises');
+const { copyFile, mkdir, writeFile, readFile } = require('node:fs/promises');
 const { join } = require('node:path');
 
 async function build() {
@@ -8,11 +8,15 @@ async function build() {
   const page = guest
     .replace('<body>', '<body data-published>')
     .replace(/\s*<a[^>]*data-editor-link[^>]*>.*?<\/a>/, '');
+  const output = join(__dirname, 'dist');
+  await mkdir(output, { recursive: true });
   await Promise.all([
-    writeFile(join(__dirname, 'docs/index.html'), page),
-    copyFile(join(__dirname, 'app.js'), join(__dirname, 'docs/app.js')),
-    copyFile(join(__dirname, 'booking.js'), join(__dirname, 'docs/booking.js')),
-    copyFile(join(__dirname, 'styles.css'), join(__dirname, 'docs/styles.css')),
+    writeFile(join(output, 'index.html'), page),
+    copyFile(join(__dirname, 'app.js'), join(output, 'app.js')),
+    copyFile(join(__dirname, 'booking.js'), join(output, 'booking.js')),
+    copyFile(join(__dirname, 'styles.css'), join(output, 'styles.css')),
+    copyFile(join(__dirname, 'docs/gifts.json'), join(output, 'gifts.json')),
+    copyFile(join(__dirname, 'docs/booking-config.json'), join(output, 'booking-config.json')),
   ]);
 }
 

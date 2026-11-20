@@ -1,6 +1,12 @@
 # Список желаний Агаты
 
-Редактор запускается локально. Гостевая страница на GitHub Pages читает список из `docs/gifts.json`, а брони хранит в Supabase.
+Редактор запускается локально. Гостевой сайт собирается в `dist/`, получает список из `docs/gifts.json` и хранит брони в Supabase.
+
+## Переключить публикацию на GitHub Actions
+
+1. В репозитории `dbuka/wishlist` открой **Settings → Pages**. В разделе **Build and deployment** выбери **Source → GitHub Actions**. [Инструкция GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+2. Отправь коммит с workflow в ветку `main`. Workflow **Publish wishlist** сам соберёт и опубликует сайт. Если коммит уже отправлен, запусти сборку через **Actions → Publish wishlist → Run workflow**, выбрав `main`.
+3. После успешного запуска открой [опубликованный вишлист](https://dbuka.github.io/wishlist/).
 
 ## Обновить список подарков
 
@@ -12,13 +18,15 @@
 
 2. Открой [редактор](http://127.0.0.1:3000/) в том же браузере и по тому же адресу, где добавляла подарки. Редактор хранит список в браузере. Перед экспортом убедись, что в редакторе виден весь список, который хочешь опубликовать.
 3. Добавь, отредактируй или удали подарки. Нажми **Экспортировать для публикации** и замени скачанным файлом `gifts.json` файл `docs/gifts.json` в репозитории. Экспорт содержит весь список.
-4. Открой [локальную гостевую страницу](http://127.0.0.1:3000/wishlist/) и проверь карточки. На этой странице бронирование подключается к Supabase из `docs/booking-config.json`. Кнопка **Предпросмотр** в редакторе показывает список из браузера.
+4. Запусти `node build-pages.js` и открой [локальную гостевую страницу](http://127.0.0.1:3000/wishlist/), чтобы проверить собранные карточки. На этой странице бронирование подключается к Supabase. Кнопка **Предпросмотр** в редакторе показывает список из браузера сразу, без сборки.
 5. В **GitHub Desktop** выбери репозиторий `wishlist` и ветку `main`. На вкладке **Changes** отметь `docs/gifts.json`, напиши короткое описание, например «Обновить список подарков», нажми **Commit to main**, затем **Push origin**.
-6. Дождись успешной публикации во вкладке **Actions** на GitHub и обнови гостевую страницу. Адрес сайта можно найти в **Settings → Pages**.
+6. Дождись успешного запуска **Publish wishlist** во вкладке **Actions** и обнови [гостевую страницу](https://dbuka.github.io/wishlist/).
 
-Для обновления только подарков достаточно заменить `docs/gifts.json`. GitHub Pages публикует файлы из папки `/docs` ветки `main`. [Настройка источника публикации](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+Для обновления только подарков достаточно закоммитить и отправить `docs/gifts.json` в `main`.
 
 ## Обновить оформление или поведение сайта
+
+Палитра и примеры компонентов для оформления вишлиста собраны на странице [Bootswatch Quartz](https://bootswatch.com/quartz/). Локальные стили находятся в `styles.css`.
 
 После правок в `wishlist.html`, `app.js`, `booking.js` или `styles.css` запусти из папки репозитория:
 
@@ -26,7 +34,7 @@
 node build-pages.js
 ```
 
-Проверь [локальную гостевую страницу](http://127.0.0.1:3000/wishlist/) и отправь на GitHub исходные файлы вместе с изменившимися файлами в `docs/`. Сборка сохраняет `docs/gifts.json` и `docs/booking-config.json`. Разметка редактора находится в `index.html`, гостевой страницы — в `wishlist.html`.
+Проверь [локальную гостевую страницу](http://127.0.0.1:3000/wishlist/) и отправь изменённые исходники в `main`. Разметку гостевой страницы редактируй в `wishlist.html`, разметку редактора — в `index.html`. Папку `dist/` GitHub Actions собирает заново при каждой публикации. Старые копии HTML, JS и CSS в `docs/` нужны текущей публикации до переключения источника.
 
 ## Управлять бронями
 
@@ -47,4 +55,4 @@ node build-pages.js
 
 1. В Supabase открой **SQL Editor** и выполни содержимое `supabase/reservations.sql`.
 2. В `docs/booking-config.json` укажи URL проекта в поле `url` и публичный ключ **Publishable key** в поле `publishableKey`. Этот файл доступен посетителям сайта. Используй только публичный ключ.
-3. В репозитории GitHub открой **Settings → Pages**. В разделе **Build and deployment** выбери **Deploy from a branch**, ветку `main`, папку `/docs` и нажми **Save**. [Инструкция GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+3. Настрой источник по инструкции «Переключить публикацию на GitHub Actions» выше.

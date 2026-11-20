@@ -153,6 +153,20 @@ body {
   border-color: var(--quartz-pink);
 }
 .guest-rating { color: #ffc4e1; letter-spacing: .12em; }
+.gift-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .375rem;
+}
+.gift-actions .btn {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: .375rem .25rem;
+  font-size: .875rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
 .empty { border: 1px dashed var(--line); padding: 2.5rem 1rem; text-align: center; border-radius: 1rem; }
 dialog {
   width: min(96%, 540px);

@@ -13,12 +13,12 @@ const files = {
   '/app.js': ['app.js', 'text/javascript'],
   '/styles.css': ['styles.css', 'text/css'],
   '/booking.js': ['booking.js', 'text/javascript'],
-  '/wishlist/': ['docs/index.html', 'text/html'],
-  '/wishlist/app.js': ['docs/app.js', 'text/javascript'],
-  '/wishlist/booking.js': ['docs/booking.js', 'text/javascript'],
-  '/wishlist/styles.css': ['docs/styles.css', 'text/css'],
-  '/wishlist/gifts.json': ['docs/gifts.json', 'application/json'],
-  '/wishlist/booking-config.json': ['docs/booking-config.json', 'application/json'],
+  '/wishlist/': ['dist/index.html', 'text/html'],
+  '/wishlist/app.js': ['dist/app.js', 'text/javascript'],
+  '/wishlist/booking.js': ['dist/booking.js', 'text/javascript'],
+  '/wishlist/styles.css': ['dist/styles.css', 'text/css'],
+  '/wishlist/gifts.json': ['dist/gifts.json', 'application/json'],
+  '/wishlist/booking-config.json': ['dist/booking-config.json', 'application/json'],
 };
 
 function respond(res, status, type, body) {
